@@ -16,6 +16,9 @@ public partial class Game : Node2D
 	{
 		_spawnTimer.Timeout += SpawnPipes;
 		SignalManager.Instance.OnPlaneDied += GameOver;
+		
+		ScoreManager.ResetScore();
+		
 		SpawnPipes();
 	}
 

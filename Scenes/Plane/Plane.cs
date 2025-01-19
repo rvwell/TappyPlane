@@ -3,8 +3,8 @@ using System;
 
 public partial class Plane : CharacterBody2D
 {
-	const float GRAVITY = 800f;
-	private const float POWER = -450f;
+	const float GRAVITY = 1200f;
+	private const float POWER = -400f;
 	
 	private AnimationPlayer _animationPlayer;
 	private AnimatedSprite2D _animatedSprite2D;

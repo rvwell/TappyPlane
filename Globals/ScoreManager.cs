@@ -18,24 +18,30 @@ public partial class ScoreManager : Node
 		return Instance._score;
 	}
 
-	public void SetScore(int score)
+	public static void SetScore(int score)
 	{
-		_score = score;
+		Instance._score = score;
+		if (Instance._score > Instance._highScore)
+		{
+			Instance._highScore = Instance._score;
+		}
+		GD.Print($"Score: {Instance._score}, High Scor: {Instance._highScore}");
+		SignalManager.EmitOnScored();
 	}
 
-	public int GetHighScore()
+	public static int GetHighScore()
 	{
-		return _highScore;
+		return Instance._highScore;
 	}
 
-	public void ResetScore()
+	public static void ResetScore()
 	{
-		_score = 0;
+		SetScore(0);
 	}
 
-	public void IncrementScore()
+	public static void IncrementScore()
 	{
-		_score++;
+		SetScore(GetScore() + 1);
 	}
 
 }
