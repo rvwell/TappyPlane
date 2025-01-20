@@ -54,7 +54,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_c1a0s")
-_highScoreLabel = NodePath("MarginContainer/Label4")
+_highScoreLabel = NodePath("MarginContainer/HighScoreLabel")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -105,7 +105,7 @@ text = "HIGHSCORE"
 label_settings = ExtResource("5_w20t6")
 vertical_alignment = 1
 
-[node name="Label4" type="Label" parent="MarginContainer"]
+[node name="HighScoreLabel" type="Label" parent="MarginContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8

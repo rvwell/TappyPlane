@@ -8,12 +8,14 @@ public partial class Plane : CharacterBody2D
 	
 	private AnimationPlayer _animationPlayer;
 	private AnimatedSprite2D _animatedSprite2D;
+	private AudioStreamPlayer _engine;
 
 	// [Signal] public delegate void OnPlaneDiedEventHandler(); 
 	public override void _Ready()
 	{
 		_animationPlayer = GetNode<AnimationPlayer>("AnimationPlayer");
 		_animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+		_engine = GetNode<AudioStreamPlayer>("Engine");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -40,6 +42,7 @@ public partial class Plane : CharacterBody2D
 	{
 		SetPhysicsProcess(false);
 		_animatedSprite2D.Stop();
+		_engine.Stop();
 		// EmitSignal(SignalName.OnPlaneDied);
 		SignalManager.Instance.EmitSignal("OnPlaneDied");
 	}

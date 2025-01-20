@@ -3,11 +3,11 @@ using System;
 
 public partial class Pipes : Node2D
 {
-	const float SCROLL_SPEED = 120f;
 	[Export] private VisibleOnScreenNotifier2D _visibleOnScreenNotifier;
 	[Export] private Area2D _upperPipe;
 	[Export] private Area2D _lowerPipe;
 	[Export] private Area2D _laser;
+	[Export] private AudioStreamPlayer2D _scoreSound;
 	
 	public override void _Ready()
 	{
@@ -32,6 +32,7 @@ public partial class Pipes : Node2D
 	private void OnLaserBodyEntered(Node2D body)
 	{
 		// GD.Print("Scored");
+		_scoreSound.Play();
 		ScoreManager.IncrementScore();
 	}
 
@@ -40,7 +41,7 @@ public partial class Pipes : Node2D
 		if (body is Plane)
 		{
 			(body as Plane).Die();
-			GD.Print("Died", body.Name);
+			// GD.Print("Died", body.Name);
 		}
 		// if (body.IsInGroup("Plane"))
 		// {
@@ -50,7 +51,7 @@ public partial class Pipes : Node2D
 
 	public override void _Process(double delta)
 	{
-		Position -= new Vector2(SCROLL_SPEED*(float)delta,0);
+		Position -= new Vector2(GameManager.SCROLL_SPEED*(float)delta,0);
 	}
 	
 	private void OnScreenExited()

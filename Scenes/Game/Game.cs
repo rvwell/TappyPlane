@@ -5,21 +5,27 @@ public partial class Game : Node2D
 {
 	[Export] private Marker2D _spawnUpper;
 	[Export] private Marker2D _spawnLower;
+	//[Export] private Node2D _pipesHolder;
 	[Export] private Timer _spawnTimer;
-	// [Export] private Node2D _pipesHolder;
 	[Export] private PackedScene _pipesScene;
 	//[Export] private Plane _plane;
-	
-	private bool _gameOver;
-	
+
+	//private bool _gameOver = false;
+
+	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
 		_spawnTimer.Timeout += SpawnPipes;
 		SignalManager.Instance.OnPlaneDied += GameOver;
-		
-		ScoreManager.ResetScore();
-		
+
+		//ScoreManager.ResetScore();
+		CallDeferred("LateStuff");
 		SpawnPipes();
+	}
+
+	private void LateStuff()
+	{
+		ScoreManager.ResetScore();
 	}
 
 	public override void _ExitTree()
@@ -27,47 +33,52 @@ public partial class Game : Node2D
 		SignalManager.Instance.OnPlaneDied -= GameOver;
 	}
 
-	private void StopPipes()
-	{
-		_spawnTimer.Stop();
-		// foreach (Pipes pipe in _pipesHolder.GetChildren())
-		// {
-		// 	pipe.SetProcess(false);
-		// }
-	}
+	//private void StopPipes()
+	//{
+	//_spawnTimer.Stop();
+	// foreach(Pipes pipe in _pipesHolder.GetChildren())
+	// {
+	//     pipe.SetProcess(false);
+	// }
+	//}
 
 	private void GameOver()
-	{
-		GD.Print("Game Over");
-		StopPipes();
-		_gameOver = true;
+	{      
+		_spawnTimer.Stop();
+		//_gameOver = true;
 	}
 
-
-	public override void _Process(double delta)
-	{
-		if(Input.IsActionJustPressed("fly") && _gameOver)
-		{
-			GameManager.LoadMain();
-		}
-		
-		if(Input.IsActionJustPressed("quit"))
-		{
-			GameManager.LoadMain();
-		}
-	}
-
-	public double GetSpawnY()
-	{
-		return GD.RandRange(_spawnUpper.Position.Y, _spawnLower.Position.Y);
-	}
 
 	private void SpawnPipes()
 	{
 		Pipes np = _pipesScene.Instantiate<Pipes>();
-		// _pipesHolder.AddChild(np)
+		//_pipesHolder.AddChild(np);
 		AddChild(np);
-		np.Position = new Vector2(_spawnLower.Position.X, (float)GetSpawnY());
+		np.GlobalPosition = new Vector2(_spawnLower.GlobalPosition.X, GetSpawnY());
+	}
+
+	// Called every frame. 'delta' is the elapsed time since the previous frame.
+	public override void _Process(double delta)
+	{
+		// if(Input.IsActionJustPressed("fly") && _gameOver)
+		// {
+		//     ChangeToMain();            
+		// }
+
+		if(Input.IsKeyPressed(Key.Q))
+		{
+			GameManager.LoadMain();
+		}        
+	}
+
+	// private void ChangeToMain()
+	// {
+	//     GameManager.LoadMain();
+	// }
+
+	public float GetSpawnY()
+	{
+		return (float)GD.RandRange(_spawnUpper.GlobalPosition.Y, _spawnLower.GlobalPosition.Y);
 	}
 	
 }

@@ -5,31 +5,38 @@ public partial class ScoreManager : Node
 {
 	public static ScoreManager Instance { get; private set; }
 	
-	private int _score;
-	private int _highScore;
+	private uint _score;
+	private uint _highScore;
+
+	private const string ScoreFile = "user://tappy.save";
 	
 	public override void _Ready()
 	{
 		Instance = this;
+		LoadScoreFromFile();
 	}
-	
-	public static int GetScore()
+
+	public override void _ExitTree()
+	{
+		SaveScoreToFile();
+	}
+
+	public static uint GetScore()
 	{
 		return Instance._score;
 	}
 
-	public static void SetScore(int score)
+	public static void SetScore(uint score)
 	{
 		Instance._score = score;
 		if (Instance._score > Instance._highScore)
 		{
 			Instance._highScore = Instance._score;
 		}
-		GD.Print($"Score: {Instance._score}, High Scor: {Instance._highScore}");
 		SignalManager.EmitOnScored();
 	}
 
-	public static int GetHighScore()
+	public static uint GetHighScore()
 	{
 		return Instance._highScore;
 	}
@@ -42,6 +49,24 @@ public partial class ScoreManager : Node
 	public static void IncrementScore()
 	{
 		SetScore(GetScore() + 1);
+	}
+
+	private void LoadScoreFromFile()
+	{
+		using FileAccess file = FileAccess.Open(ScoreFile, FileAccess.ModeFlags.Read);
+		if (file != null)
+		{
+			_highScore = file.Get32();
+		}
+	}
+	
+	private void SaveScoreToFile()
+	{
+		using FileAccess file = FileAccess.Open(ScoreFile, FileAccess.ModeFlags.Write);
+		if (file != null)
+		{
+			file.Store32(_highScore);
+		}
 	}
 
 }
